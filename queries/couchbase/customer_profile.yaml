@@ -1,0 +1,13 @@
+description: Perfil de un cliente por ID
+engine: couchbase
+target:
+  bucket: customers
+params:
+  customer_id: {type: str, required: true}
+template: |
+  statement: >
+    SELECT c.id, c.name, c.segment, c.updatedAt
+    FROM `customers`._default.profiles AS c
+    WHERE c.id = $customer_id
+  params:
+    customer_id: {{ customer_id }}

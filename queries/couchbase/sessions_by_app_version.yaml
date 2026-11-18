@@ -1,0 +1,15 @@
+description: Sesiones activas por versión de la app
+engine: couchbase
+target:
+  bucket: sessions
+params:
+  min_version: {type: str, default: "1.0.0"}
+template: |
+  statement: >
+    SELECT s.appVersion, COUNT(*) AS sessions
+    FROM `sessions`._default.active AS s
+    WHERE s.appVersion >= $min_version
+    GROUP BY s.appVersion
+    ORDER BY sessions DESC
+  params:
+    min_version: {{ min_version }}
