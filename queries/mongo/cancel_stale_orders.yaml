@@ -1,0 +1,16 @@
+description: Cancela pedidos PENDING más viejos que N días
+engine: mongo
+operation: update_many
+target:
+  database: sales
+  collection: orders
+params:
+  older_than_days:
+    type: int
+    default: 30
+template: |
+  filter:
+    status: PENDING
+    ageDays: {$gt: {{ older_than_days }}}
+  update:
+    $set: {status: CANCELLED, cancelReason: stale}
