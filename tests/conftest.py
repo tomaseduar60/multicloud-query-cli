@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 import pytest
 
@@ -15,10 +15,12 @@ ROOT = Path(__file__).resolve().parents[1]
 class FakeEngine:
     """Engine en memoria: devuelve lo que recibió para poder inspeccionarlo."""
 
-    calls: list[tuple[str, Any, Credentials]] = []
-    fail_on: set[str] = set()
+    calls: ClassVar[list[tuple[str, Any, Credentials]]] = []
+    fail_on: ClassVar[set[str]] = set()
 
-    def execute(self, query: Query, rendered: Any, credentials: Credentials) -> list[dict[str, Any]]:
+    def execute(
+        self, query: Query, rendered: Any, credentials: Credentials
+    ) -> list[dict[str, Any]]:
         FakeEngine.calls.append((query.name, rendered, credentials))
         marker = next(iter(credentials.values.values()))
         if marker in FakeEngine.fail_on:
