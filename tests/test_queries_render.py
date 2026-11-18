@@ -9,8 +9,13 @@ from query_cli.render import render
 
 def test_carga_todas_las_queries_de_ejemplo(root: Path) -> None:
     queries = load_queries(root / "queries")
-    assert {"orders_by_status", "daily_sales", "cancel_stale_orders", "customer_profile",
-            "sessions_by_app_version"} <= set(queries)
+    assert {
+        "orders_by_status",
+        "daily_sales",
+        "cancel_stale_orders",
+        "customer_profile",
+        "sessions_by_app_version",
+    } <= set(queries)
     assert queries["cancel_stale_orders"].is_write
     assert not queries["orders_by_status"].is_write
 
@@ -53,9 +58,16 @@ def test_lista_desde_texto(root: Path) -> None:
 
 @pytest.mark.parametrize(
     ("kind", "raw", "expected"),
-    [("int", "5", 5), ("float", "1.5", 1.5), ("bool", "sí", True), ("bool", "0", False),
-     ("bool", True, True), ("date", "2024-02-03", "2024-02-03"), ("list", ["a"], ["a"]),
-     ("str", 7, "7")],
+    [
+        ("int", "5", 5),
+        ("float", "1.5", 1.5),
+        ("bool", "sí", True),
+        ("bool", "0", False),
+        ("bool", True, True),
+        ("date", "2024-02-03", "2024-02-03"),
+        ("list", ["a"], ["a"]),
+        ("str", 7, "7"),
+    ],
 )
 def test_coercion(kind: str, raw: object, expected: object) -> None:
     assert Param(name="p", type=kind).coerce(raw) == expected
