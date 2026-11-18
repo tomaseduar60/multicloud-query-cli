@@ -1,9 +1,9 @@
 """qcli: queries parametrizadas por región.
 
-    qcli list
-    qcli show orders_by_status
-    qcli run orders_by_status -r cas -r carib -p status=PAID -p days=7
-    qcli run orders_by_status -r all -o csv > pedidos.csv
+qcli list
+qcli show orders_by_status
+qcli run orders_by_status -r cas -r carib -p status=PAID -p days=7
+qcli run orders_by_status -r all -o csv > pedidos.csv
 """
 
 from __future__ import annotations
@@ -48,13 +48,31 @@ class Context:
 
 @click.group()
 @click.version_option(__version__, prog_name="qcli")
-@click.option("--queries", "queries_dir", type=click.Path(path_type=Path), default="queries",
-              show_default=True, envvar="QCLI_QUERIES_DIR", help="Directorio de queries.")
-@click.option("--regions", "regions_file", type=click.Path(path_type=Path),
-              default="regions.yaml", show_default=True, envvar="QCLI_REGIONS_FILE",
-              help="Archivo de regiones.")
-@click.option("--env-file", type=click.Path(path_type=Path), default=".env", show_default=True,
-              help="Archivo .env con las credenciales (si existe).")
+@click.option(
+    "--queries",
+    "queries_dir",
+    type=click.Path(path_type=Path),
+    default="queries",
+    show_default=True,
+    envvar="QCLI_QUERIES_DIR",
+    help="Directorio de queries.",
+)
+@click.option(
+    "--regions",
+    "regions_file",
+    type=click.Path(path_type=Path),
+    default="regions.yaml",
+    show_default=True,
+    envvar="QCLI_REGIONS_FILE",
+    help="Archivo de regiones.",
+)
+@click.option(
+    "--env-file",
+    type=click.Path(path_type=Path),
+    default=".env",
+    show_default=True,
+    help="Archivo .env con las credenciales (si existe).",
+)
 @click.pass_context
 def cli(ctx: click.Context, queries_dir: Path, regions_file: Path, env_file: Path) -> None:
     """Queries parametrizadas en MongoDB y Couchbase, por región."""
@@ -90,13 +108,21 @@ def show(obj: Context, name: str) -> None:
 @click.argument("name")
 @click.option("-r", "--region", "regions", multiple=True, help="Región (repetible) o 'all'.")
 @click.option("-p", "--param", "params", multiple=True, help="Parámetro clave=valor (repetible).")
-@click.option("-o", "--output", type=click.Choice(sorted(FORMATTERS)), default="table",
-              show_default=True)
+@click.option(
+    "-o", "--output", type=click.Choice(sorted(FORMATTERS)), default="table", show_default=True
+)
 @click.option("--dry-run", is_flag=True, help="Solo muestra la query renderizada.")
 @click.option("--allow-write", is_flag=True, help="Permite queries que modifican datos.")
 @click.pass_obj
-def run_cmd(obj: Context, name: str, regions: tuple[str, ...], params: tuple[str, ...],
-            output: str, dry_run: bool, allow_write: bool) -> None:
+def run_cmd(
+    obj: Context,
+    name: str,
+    regions: tuple[str, ...],
+    params: tuple[str, ...],
+    output: str,
+    dry_run: bool,
+    allow_write: bool,
+) -> None:
     """Ejecuta una query en una o varias regiones."""
     q = obj.query(name)
     given = _parse_params(params)

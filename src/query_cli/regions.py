@@ -59,9 +59,7 @@ def _parse_region(name: str, raw: dict[str, Any]) -> Region:
         section = raw.get(engine)
         if section is None:
             continue
-        if not isinstance(section, dict) or not all(
-            isinstance(v, str) for v in section.values()
-        ):
+        if not isinstance(section, dict) or not all(isinstance(v, str) for v in section.values()):
             raise ConfigError(f"regions.{name}.{engine} debe ser un mapa campo -> variable.")
         env_refs[engine] = {key.removesuffix("_env"): var for key, var in section.items()}
     if not env_refs:

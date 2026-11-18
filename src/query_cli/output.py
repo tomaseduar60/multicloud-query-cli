@@ -16,8 +16,13 @@ def _flatten(results: list[RegionResult]) -> list[dict[str, Any]]:
 
 def to_json(results: list[RegionResult]) -> str:
     payload = [
-        {"region": r.region, "ok": r.ok, "error": r.error, "elapsed_ms": r.elapsed_ms,
-         "rows": r.rows}
+        {
+            "region": r.region,
+            "ok": r.ok,
+            "error": r.error,
+            "elapsed_ms": r.elapsed_ms,
+            "rows": r.rows,
+        }
         for r in results
     ]
     return json.dumps(payload, ensure_ascii=False, indent=2, default=str)
@@ -55,9 +60,13 @@ def to_table(results: list[RegionResult], max_width: int = 40) -> str:
 
 
 def _cell(value: Any, max_width: int) -> str:
-    text = json.dumps(value, ensure_ascii=False, default=str) if isinstance(
-        value, dict | list
-    ) else "" if value is None else str(value)
+    text = (
+        json.dumps(value, ensure_ascii=False, default=str)
+        if isinstance(value, dict | list)
+        else ""
+        if value is None
+        else str(value)
+    )
     return text if len(text) <= max_width else text[: max_width - 1] + "…"
 
 
