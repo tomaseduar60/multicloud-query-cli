@@ -1,0 +1,29 @@
+# Regiones disponibles. Cada una apunta a sus propios clusters con credenciales propias.
+# Acá solo van NOMBRES de variables de entorno; los valores van en .env (ver .env.example).
+regions:
+  cas:
+    description: Centroamérica Sur
+    mongo:
+      uri_env: MONGO_URI_CAS
+    couchbase:
+      connstr_env: COUCHBASE_CONNSTR_CAS
+      username_env: COUCHBASE_USER_CAS
+      password_env: COUCHBASE_PASSWORD_CAS
+
+  carib:
+    description: Caribe
+    mongo:
+      uri_env: MONGO_URI_CARIB
+    couchbase:
+      connstr_env: COUCHBASE_CONNSTR_CARIB
+      username_env: COUCHBASE_USER_CARIB
+      password_env: COUCHBASE_PASSWORD_CARIB
+
+  sa:
+    description: Sudamérica
+    mongo:
+      uri_env: MONGO_URI_SA
+    couchbase:
+      connstr_env: COUCHBASE_CONNSTR_SA
+      username_env: COUCHBASE_USER_SA
+      password_env: COUCHBASE_PASSWORD_SA
