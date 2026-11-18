@@ -1,0 +1,56 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "multicloud-query-cli"
+version = "0.1.0"
+description = "Queries parametrizadas (Jinja2 + YAML) en MongoDB y Couchbase, con credenciales por región."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Tomas Ojeda Stark" }]
+dependencies = [
+  "click>=8.1",
+  "jinja2>=3.1",
+  "pyyaml>=6.0",
+  "python-dotenv>=1.0",
+]
+
+[project.optional-dependencies]
+mongo = ["pymongo>=4.6"]
+couchbase = ["couchbase>=4.2"]
+dev = [
+  "pytest>=8.0",
+  "pytest-cov>=5.0",
+  "ruff>=0.6",
+  "mypy>=1.10",
+  "types-PyYAML",
+]
+
+[project.scripts]
+qcli = "query_cli.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/query_cli"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.coverage.run]
+source = ["query_cli"]
+omit = ["src/query_cli/engines/mongo.py", "src/query_cli/engines/couchbase.py"]
