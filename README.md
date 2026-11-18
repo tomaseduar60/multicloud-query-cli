@@ -14,7 +14,7 @@ CLI para correr **queries parametrizadas** contra MongoDB y Couchbase en **varia
 Nace de un problema concreto: las mismas consultas de soporte se repetían a mano en cada región, copiando y pegando URIs y cambiando valores a ojo. Con `qcli` la query se escribe una vez en YAML, los parámetros se validan antes de tocar la base, y la misma consulta corre en todas las regiones en paralelo.
 
 ```console
-$ qcli run orders_by_status -r cas -r carib -p status=PAID -p days=3
+$ qcli run orders_by_status -r all -p status=PAID -p days=3
 region  orderId  customerId  total   status
 ------  -------  ----------  ------  ------
 cas     A-1029   C-77        125.40  PAID
@@ -22,7 +22,7 @@ carib   B-5512   C-90        88.00   PAID
 
 [cas] 1 filas (182 ms)
 [carib] 1 filas (240 ms)
-[sa] ...
+[sa] 0 filas (205 ms)
 ```
 
 ## Cómo funciona
