@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches: [develop, qa, main]
+
+permissions:
+  contents: read
+
+jobs:
+  python:
+    uses: tomaseduar60/github-actions-templates/.github/workflows/reusable-python-ci.yml@v1
+    with:
+      python-version: "3.12"
+      coverage-threshold: 80
+
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install .
+      - name: el CLI instalado responde
+        run: |
+          qcli --version
+          qcli list
+          qcli run orders_by_status --dry-run -p status=PAID -p days=3
