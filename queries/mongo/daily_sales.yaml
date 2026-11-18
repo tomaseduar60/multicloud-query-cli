@@ -1,0 +1,24 @@
+description: Ventas totales por día y canal
+engine: mongo
+operation: aggregate
+target:
+  database: sales
+  collection: orders
+params:
+  from: {type: date, required: true}
+  to: {type: date, required: true}
+  channels:
+    type: list
+    default: [app, web]
+template: |
+  pipeline:
+    - $match:
+        status: PAID
+        channel: {$in: {{ channels }}}
+        day: {$gte: {{ from }}, $lte: {{ to }}}
+    - $group:
+        _id: {day: "$day", channel: "$channel"}
+        orders: {$sum: 1}
+        total: {$sum: "$total"}
+    - $sort: {"_id.day": 1}
+    - $project: {_id: 0, day: "$_id.day", channel: "$_id.channel", orders: 1, total: 1}
